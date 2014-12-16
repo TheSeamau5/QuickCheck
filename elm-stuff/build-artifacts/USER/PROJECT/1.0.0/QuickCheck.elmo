@@ -1,0 +1,78 @@
+Elm.QuickCheck = Elm.QuickCheck || {};
+Elm.QuickCheck.make = function (_elm) {
+   "use strict";
+   _elm.QuickCheck = _elm.QuickCheck || {};
+   if (_elm.QuickCheck.values)
+   return _elm.QuickCheck.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "QuickCheck",
+   $Basics = Elm.Basics.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Random = Elm.Random.make(_elm);
+   var constructFailingString = function (failingCase) {
+      return A2($Basics._op["++"],
+      "The following input has failed the test : ",
+      $Basics.toString($Basics.fst(failingCase)));
+   };
+   var constructSuccessString = function (numberOfCases) {
+      return A2($Basics._op["++"],
+      "Ok, passed ",
+      A2($Basics._op["++"],
+      $Basics.toString(numberOfCases),
+      " tests."));
+   };
+   var filterFailingCases = function (caseResultPairList) {
+      return A2($List.filter,
+      function (x) {
+         return _U.eq($Basics.snd(x),
+         false);
+      },
+      caseResultPairList);
+   };
+   var constructTestResultString = F2(function (numberOfCases,
+   caseResultPairList) {
+      return function () {
+         var failingCases = filterFailingCases(caseResultPairList);
+         return _U.eq(failingCases,
+         _L.fromArray([])) ? constructSuccessString(numberOfCases) : constructFailingString($List.head(failingCases));
+      }();
+   });
+   var constructCaseResultPair = F2(function (testingCondition,
+   input) {
+      return {ctor: "_Tuple2"
+             ,_0: input
+             ,_1: testingCondition(input)};
+   });
+   var generateTestCases = function (listGenerator) {
+      return $Basics.fst(A2($Random.generate,
+      listGenerator,
+      $Random.initialSeed(1)));
+   };
+   var quickCheck = F3(function (randomGenerator,
+   numberOfCases,
+   testingCondition) {
+      return function () {
+         var listGenerator = $Random.list(numberOfCases)(randomGenerator);
+         var testCases = generateTestCases(listGenerator);
+         var caseResultPairList = A2($List.map,
+         constructCaseResultPair(testingCondition),
+         testCases);
+         return A2(constructTestResultString,
+         numberOfCases,
+         caseResultPairList);
+      }();
+   });
+   _elm.QuickCheck.values = {_op: _op
+                            ,generateTestCases: generateTestCases
+                            ,constructCaseResultPair: constructCaseResultPair
+                            ,filterFailingCases: filterFailingCases
+                            ,constructSuccessString: constructSuccessString
+                            ,constructFailingString: constructFailingString
+                            ,constructTestResultString: constructTestResultString
+                            ,quickCheck: quickCheck};
+   return _elm.QuickCheck.values;
+};

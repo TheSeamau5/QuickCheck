@@ -1,0 +1,34 @@
+Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
+   "use strict";
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values)
+   return _elm.Main.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Main",
+   $Basics = Elm.Basics.make(_elm),
+   $QuickCheck = Elm.QuickCheck.make(_elm),
+   $Random = Elm.Random.make(_elm),
+   $Text = Elm.Text.make(_elm);
+   var numberOfTestCases = 100;
+   var randomGenerator = A2($Random.$float,
+   0,
+   1);
+   var condition = function (x) {
+      return _U.eq(x + 1,x);
+   };
+   var main = $Text.asText(A3($QuickCheck.quickCheck,
+   randomGenerator,
+   numberOfTestCases,
+   condition));
+   _elm.Main.values = {_op: _op
+                      ,condition: condition
+                      ,randomGenerator: randomGenerator
+                      ,numberOfTestCases: numberOfTestCases
+                      ,main: main};
+   return _elm.Main.values;
+};
