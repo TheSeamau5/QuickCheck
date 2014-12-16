@@ -1,22 +1,28 @@
 QuickCheck
 ==========
 
-This is library is heavily inspired by Haskell's QuickCheck library and features a much simplified implementation 
+This is library is heavily inspired by Haskell's QuickCheck library and features a much simplified implementation
 of the quickcheck function in Elm.
 
 ### How to use ###
+
+First, import the module
+
+```elm
+import QuickCheck (..)
+```
 
 The quickCheck function helps automate the testing of functions. Suppose you created this super duper awesome
 function to add two floats which you've, very creatively, called `add`
 ```elm
 add : Float -> Float -> Float
 add x y = x + y
-```    
+```
 You'd like to test your awesome function to make sure it works but you have to come up with all these tests. That's
 where `quickCheck` can help.
 
 `quickCheck` will automatically create as many test cases as you want it to create using a random generator of your
-choosing and test a condition that you think should be true about your function. 
+choosing and test a condition that you think should be true about your function.
 
 For example, adding a positive number to minus itself should yield 0. Your `add` function wouldn't really be an add
 function if that weren't the case.
