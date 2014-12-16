@@ -1432,21 +1432,26 @@ Elm.Main.make = function (_elm) {
    $QuickCheck = Elm.QuickCheck.make(_elm),
    $Random = Elm.Random.make(_elm),
    $Text = Elm.Text.make(_elm);
-   var numberOfTestCases = 100;
+   var numberOfCases = 100;
    var randomGenerator = A2($Random.$float,
    0,
-   1);
+   100);
+   var add = F2(function (x,y) {
+      return x - y;
+   });
    var condition = function (x) {
-      return _U.eq(x + 1,x);
+      return _U.eq(A2(add,x,0 - x),
+      0);
    };
    var main = $Text.asText(A3($QuickCheck.quickCheck,
    randomGenerator,
-   numberOfTestCases,
+   numberOfCases,
    condition));
    _elm.Main.values = {_op: _op
+                      ,add: add
                       ,condition: condition
                       ,randomGenerator: randomGenerator
-                      ,numberOfTestCases: numberOfTestCases
+                      ,numberOfCases: numberOfCases
                       ,main: main};
    return _elm.Main.values;
 };
